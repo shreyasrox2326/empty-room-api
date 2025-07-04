@@ -24,11 +24,11 @@ def home():
         if key != xxxx: sleep(3)
 
         data = [
-            {"Action": "Help", "Format" : "/?no-delay-key=<KEY>"},
-            {"Action": "List all rooms", "Format" : "/list-rooms?no-delay-key=<KEY>"},
-            {"Action": "Fetch data for room", "Format" : "/fetch-room?roomname=D217?no-delay-key=<KEY>"},
-            {"Action" : "Check if room is available during a given instant on a specific day", "Format" : "/check-instant?roomname=D217&day=Mon&time=01:00 PM?no-delay-key=<KEY>"},
-            {"Action" : "Check if room is available during a given interval on a specific day", "Format" : "/check-interval?roomname=D217&day=Mon&starttime=09:00 AM&endtime=01:00 PM?no-delay-key=<KEY>"}
+            {"Action": "Help", "Format" : "/?no-delay-key=--KEY--"},
+            {"Action": "List all rooms", "Format" : "/list-rooms?no-delay-key=--KEY--"},
+            {"Action": "Fetch data for room", "Format" : "/fetch-room?roomname=D217?no-delay-key=--KEY--"},
+            {"Action" : "Check if room is available during a given instant on a specific day", "Format" : "/check-instant?roomname=D217&day=Mon&time=01:00 PM?no-delay-key=--KEY--"},
+            {"Action" : "Check if room is available during a given interval on a specific day", "Format" : "/check-interval?roomname=D217&day=Mon&starttime=09:00 AM&endtime=01:00 PM?no-delay-key=--KEY--"}
         ]
         return jsonify(data)
     
