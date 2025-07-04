@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 from pathlib import Path
 from parsecsv import *
-
+import os
+from time import sleep
+xxxx = os.environ['no-delay-key']
 
 app = Flask(__name__)
 @app.route('/', methods = ['GET', 'POST'])
@@ -9,17 +11,18 @@ def home():
     if(request.method == 'GET'):
 
         data = [
-            {"Action": "List all rooms", "Format" : "/list-rooms"},
-            {"Action": "Fetch data for room", "Format" : "/fetch-room?roomname=D217"},
-            {"Action" : "Check if room is available during a given instant on a specific day", "Format" : "/check-instant?roomname=D217&day=Mon&time=01:00 PM"},
-            {"Action" : "Check if room is available during a given interval on a specific day", "Format" : "/check-interval?roomname=D217&day=Mon&starttime=09:00 AM&endtime=01:00 PM"}
+            {"Action": "List all rooms", "Format" : "/list-rooms?no-delay-key=<KEY>"},
+            {"Action": "Fetch data for room", "Format" : "/fetch-room?roomname=D217?no-delay-key=<KEY>"},
+            {"Action" : "Check if room is available during a given instant on a specific day", "Format" : "/check-instant?roomname=D217&day=Mon&time=01:00 PM?no-delay-key=<KEY>"},
+            {"Action" : "Check if room is available during a given interval on a specific day", "Format" : "/check-interval?roomname=D217&day=Mon&starttime=09:00 AM&endtime=01:00 PM?no-delay-key=<KEY>"}
         ]
         return jsonify(data)
     
 @app.route('/list-rooms', methods = ['GET', 'POST'])
 def list_rooms():
     if(request.method == 'GET'):
-
+        key = request.args.get('no-delay-key', -1)
+        if key != xxxx: sleep(3)
         data = csv_result['roomset']
         return jsonify({"Rooms":data})
 
@@ -27,6 +30,8 @@ def list_rooms():
 def fetch_room():
     if(request.method == 'GET'):
         input_string = request.args.get("roomname")
+        key = request.args.get('no-delay-key', -1)
+        if key != xxxx: sleep(3)
 
         data = fetchroom(input_string).dict()
         return jsonify({"Result":data})
@@ -37,6 +42,8 @@ def check_instant():
         roomname = request.args.get("roomname")
         day = request.args.get("day")
         time = request.args.get("time")
+        key = request.args.get('no-delay-key', -1)
+        if key != xxxx: sleep(3)
 
         data = fetchroom(roomname).checkinstant(day, time)
         return jsonify({"roomname":roomname, "day" : day, 'time': time, 'available' : data})
@@ -49,6 +56,8 @@ def check_interval():
         starttime = request.args.get("starttime")
         endtime = request.args.get("endtime")
         print(roomname, day, starttime, endtime)
+        key = request.args.get('no-delay-key', -1)
+        if key != xxxx: sleep(3)
 
         
         data = fetchroom(roomname).checkinterval(day, starttime, endtime)
