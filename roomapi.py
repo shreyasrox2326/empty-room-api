@@ -85,7 +85,7 @@ def check_interval():
         roomresult = fetchroom(roomname)
         if roomresult: data= roomresult.checkinterval(day, starttime, endtime)
         else: data='Room Not Found'
-        return jsonify({"roomname":roomname, "day" : day, 'interval': starttime+' - '+endtime, 'available' : data})
+        return jsonify({"roomname":roomname, "day" : day, 'interval': str(starttime)+' - '+str(endtime), 'available' : data})
     
 
 @app.route('/list-instant', methods = ['GET', 'POST'])
@@ -111,7 +111,7 @@ def list_interval():
 
         
         data = [i for i in csv_result['roomset'] if fetchroom(i).checkinterval(day, starttime, endtime)==True]
-        return jsonify({"day" : day, 'interval': starttime+' - '+endtime, 'available' : data})
+        return jsonify({"day" : day, 'interval': str(starttime)+' - '+str(endtime), 'available' : data})
 
 # Run with gunicorn -w 1 roomapi:app
 
