@@ -24,6 +24,7 @@ def home():
         if key != xxxx: sleep(3)
 
         data = [
+            {"Message":"If someone wants to make a front end for this please do."},
             {"Action": "Help", "Format" : "/?no-delay-key=--OPTIONAL--KEY--"},
             {"Action": "List all rooms", "Format" : "/list-rooms&no-delay-key=--OPTIONAL--KEY--"},
             {"Action": "Fetch data for room", "Format" : "/fetch-room?roomname=D217&no-delay-key=--OPTIONAL--KEY--"},
