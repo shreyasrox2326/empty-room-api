@@ -18,12 +18,11 @@ except:
 app = Flask(__name__)
 
 @app.route("/healthz")
+@app.route("/home")
 def health():
-    return "", 200  # or 200, or 301, whatever
+    return "", 200
 
-
-@app.route('/', methods = ['GET', 'POST'])
-@app.route('/home', methods = ['GET', 'POST'])
+@app.route('/', methods = ['GET', 'POST', 'HEAD'])
 def home():
     if(request.method == 'GET'):
 
@@ -41,6 +40,7 @@ def home():
             {"Action" : "List all available rooms during a given interval on a specific day", "Format" : "/list-interval?day=Mon&starttime=09:00 AM&endtime=01:00 PM&no-delay-key=--OPTIONAL--KEY--"},
         ]
         return jsonify(data)
+    else: return "", 200
     
 @app.route('/list-rooms', methods = ['GET', 'POST'])
 def list_rooms():
