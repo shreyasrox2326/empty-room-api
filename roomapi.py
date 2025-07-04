@@ -16,12 +16,9 @@ except:
         xxxx = 'null'
 
 app = Flask(__name__)
-@app.route('/', methods = ['GET', 'POST', 'HEAD'])
-@app.route('/home', methods = ['GET', 'POST', 'HEAD'])
+@app.route('/', methods = ['GET', 'POST'])
+@app.route('/home', methods = ['GET', 'POST'])
 def home():
-    # if request method head return 200
-    if request.method == 'HEAD':
-        return '', 200
     if(request.method == 'GET'):
 
         key = request.args.get('no-delay-key', -1)
@@ -80,6 +77,7 @@ def check_interval():
         day = request.args.get("day")
         starttime = request.args.get("starttime")
         endtime = request.args.get("endtime")
+        print(roomname, day, starttime, endtime)
         key = request.args.get('no-delay-key', -1)
         if key != xxxx: sleep(3)
 
