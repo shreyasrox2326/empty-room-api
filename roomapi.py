@@ -3,14 +3,28 @@ from pathlib import Path
 from parsecsv import *
 import os
 from time import sleep
-xxxx = os.environ['no-delay-key']
+try: import env
+except: pass
+
+try:
+    xxxx = os.environ['no-delay-key']
+except:
+    print('No key in environment')
+    try: xxxx = env.no_delay_key
+    except:
+        print('null key')
+        xxxx = 'null'
 
 app = Flask(__name__)
 @app.route('/', methods = ['GET', 'POST'])
 def home():
     if(request.method == 'GET'):
 
+        key = request.args.get('no-delay-key', -1)
+        if key != xxxx: sleep(3)
+
         data = [
+            {"Action": "Help", "Format" : "/?no-delay-key=<KEY>"},
             {"Action": "List all rooms", "Format" : "/list-rooms?no-delay-key=<KEY>"},
             {"Action": "Fetch data for room", "Format" : "/fetch-room?roomname=D217?no-delay-key=<KEY>"},
             {"Action" : "Check if room is available during a given instant on a specific day", "Format" : "/check-instant?roomname=D217&day=Mon&time=01:00 PM?no-delay-key=<KEY>"},
