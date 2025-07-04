@@ -96,7 +96,7 @@ def list_instant():
         key = request.args.get('no-delay-key', -1)
         if key != xxxx: sleep(3)
 
-        data = [i for i in csv_result['roomset'] if fetchroom(i).checkinstant(day, time)]
+        data = [i for i in csv_result['roomset'] if fetchroom(i).checkinstant(day, time)==True]
         return jsonify({"day" : day, 'time': time, 'available' : data})
 
 @app.route('/list-interval', methods = ['GET', 'POST'])
@@ -110,7 +110,7 @@ def list_interval():
         if key != xxxx: sleep(3)
 
         
-        data = [i for i in csv_result['roomset'] if fetchroom(i).checkinterval(day, starttime, endtime)]
+        data = [i for i in csv_result['roomset'] if fetchroom(i).checkinterval(day, starttime, endtime)==True]
         return jsonify({"day" : day, 'interval': starttime+' - '+endtime, 'available' : data})
 
 # Run with gunicorn -w 1 roomapi:app

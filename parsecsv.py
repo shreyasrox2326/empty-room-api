@@ -57,7 +57,7 @@ class room():
     def checkinstant(self, day: str, timestring: str) -> bool:
         """Check if the room is available at the specified time instant on the specified day."""
         try: check_time = datetime.strptime(timestring, "%I:%M %p").time()
-        except: return False
+        except: return "Invalid Time"
         for e in self.events:
             if day in e.day:
                 if e.starttime.time() <= check_time < e.endtime.time():
@@ -69,7 +69,7 @@ class room():
         try:
             check_start = datetime.strptime(start_time, "%I:%M %p").time()
             check_end = datetime.strptime(end_time, "%I:%M %p").time()
-        except: return False
+        except: return "Invalid Time"
         for e in self.events:
             if day in e.day:
                 # Check for overlap
