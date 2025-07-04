@@ -16,6 +16,12 @@ except:
         xxxx = 'null'
 
 app = Flask(__name__)
+
+@app.route("/healthz")
+def health():
+    return "", 200  # or 200, or 301, whatever
+
+
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
 def home():
