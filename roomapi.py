@@ -57,7 +57,7 @@ def check_interval():
     
 
 
-# Run with gunicorn -w 1 -b 127.0.0.1:5000 roomapi:app
+# Run with gunicorn -w 1 roomapi:app
 
 # driver function
 if __name__ == '__main__':
