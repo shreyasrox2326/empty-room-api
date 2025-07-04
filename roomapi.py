@@ -27,7 +27,7 @@ def home():
         data = [
             {"Message":"If someone wants to make a front end for this please do."},
             {"Action": "Help", "Format" : "/?no-delay-key=--OPTIONAL--KEY--"},
-            {"Action": "List all rooms", "Format" : "/list-rooms&no-delay-key=--OPTIONAL--KEY--"},
+            {"Action": "List all rooms", "Format" : "/list-rooms?no-delay-key=--OPTIONAL--KEY--"},
             {"Action": "Fetch data for room", "Format" : "/fetch-room?roomname=D217&no-delay-key=--OPTIONAL--KEY--"},
             {"Action" : "Check if room is available during a given instant on a specific day", "Format" : "/check-instant?roomname=D217&day=Mon&time=01:00 PM&no-delay-key=--OPTIONAL--KEY--"},
             {"Action" : "Check if room is available during a given interval on a specific day", "Format" : "/check-interval?roomname=D217&day=Mon&starttime=09:00 AM&endtime=01:00 PM&no-delay-key=--OPTIONAL--KEY--"},
@@ -51,7 +51,9 @@ def fetch_room():
         key = request.args.get('no-delay-key', -1)
         if key != xxxx: sleep(3)
 
-        data = fetchroom(input_string).dict()
+        roomresult = fetchroom(input_string)
+        if roomresult: data=roomresult.dict()
+        else: data='Room Not Found'
         return jsonify({"Result":data})
 
 @app.route('/check-instant', methods = ['GET', 'POST'])
@@ -63,7 +65,9 @@ def check_instant():
         key = request.args.get('no-delay-key', -1)
         if key != xxxx: sleep(3)
 
-        data = fetchroom(roomname).checkinstant(day, time)
+        roomresult = fetchroom(roomname)
+        if roomresult: data=roomresult.checkinstant(day, time)
+        else: data='Room Not Found'
         return jsonify({"roomname":roomname, "day" : day, 'time': time, 'available' : data})
 
 @app.route('/check-interval', methods = ['GET', 'POST'])
@@ -78,7 +82,9 @@ def check_interval():
         if key != xxxx: sleep(3)
 
         
-        data = fetchroom(roomname).checkinterval(day, starttime, endtime)
+        roomresult = fetchroom(roomname)
+        if roomresult: data= roomresult.checkinterval(day, starttime, endtime)
+        else: data='Room Not Found'
         return jsonify({"roomname":roomname, "day" : day, 'interval': starttime+' - '+endtime, 'available' : data})
     
 
