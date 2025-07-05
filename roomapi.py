@@ -6,7 +6,7 @@ from time import sleep
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["https://yourusername.github.io"])  # ← this line enables CORS
+CORS(app, origins=["https://shreyasrox2326.github.io"])  # ← this line enables CORS
 
 try: import env
 except: pass
