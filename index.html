@@ -135,7 +135,7 @@
         
         .no-delay-toggle {
             position: absolute;
-            right: -30px; /* Adjusted position */
+            right: -30px; /* Reverted to user's requested position */
             top: 50%;
             transform: translateY(-50%);
             background: none;
@@ -246,8 +246,8 @@
         .segment-wrapper {
             position: relative;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            align-items: center; /* Align items horizontally */
+            gap: 5px; /* Space between buttons and display */
         }
 
         .segment-display {
@@ -261,6 +261,7 @@
             position: relative;
             cursor: pointer; /* Make it clickable */
             border-radius: 4px; /* Added for consistency */
+            flex-shrink: 0; /* Prevent shrinking */
         }
         
         .segment-display.active {
@@ -285,19 +286,6 @@
             border: 1px solid var(--primary-color); /* Added border for label */
         }
 
-        .arrow-buttons {
-            display: flex;
-            justify-content: space-between;
-            width: 100%; /* Ensure arrows span the width of the segment display */
-            margin-top: 5px;
-            opacity: 0; /* Hidden by default */
-            transition: opacity 0.3s ease;
-        }
-
-        .segment-display.active + .arrow-buttons {
-            opacity: 1; /* Show when active */
-        }
-        
         .arrow-btn {
             background: var(--bg-color);
             border: 2px solid var(--primary-color);
@@ -309,6 +297,7 @@
             font-weight: bold;
             transition: all 0.2s ease;
             border-radius: 4px; /* Added for consistency */
+            display: none; /* Hidden by default on desktop */
         }
 
         .arrow-btn:hover {
@@ -389,8 +378,36 @@
             }
             
             .seven-segment {
-                flex-direction: column;
+                flex-direction: column; /* Keep column for overall segment display alignment */
                 align-items: center;
+            }
+
+            .segment-wrapper {
+                flex-direction: row; /* Arrange buttons and display in a row */
+                width: 100%; /* Take full width to center content */
+                justify-content: center; /* Center the items within the wrapper */
+                margin-bottom: 10px; /* Add space between segment rows on mobile */
+            }
+
+            .segment-display {
+                min-width: 80px; /* Adjust min-width for mobile */
+                padding: 10px; /* Adjust padding for mobile */
+            }
+
+            .arrow-btn {
+                display: block; /* Show arrows on mobile */
+                opacity: 0; /* Hidden by default, shown when active */
+                transition: opacity 0.3s ease;
+            }
+
+            /* Show arrow buttons when the associated segment display is active */
+            .segment-display.active + .arrow-btn,
+            .arrow-btn[data-target].active { /* For the case where active class is directly on button */
+                opacity: 1;
+            }
+            /* Specific rule to show arrows if the display is active (since buttons are now siblings) */
+            .segment-wrapper:has(.segment-display.active) .arrow-btn {
+                opacity: 1;
             }
             
             .controls {
@@ -657,8 +674,6 @@
                     selectAction(parseInt(item.dataset.index));
                 });
             });
-            // Ensure back to menu sound plays even if clicked
-            document.querySelector('.btn[onclick="showMenu()"]') && document.querySelector('.btn[onclick="showMenu()"]').addEventListener('click', () => playSound(800, 100));
         };
         
         const selectAction = (index) => {
@@ -722,32 +737,25 @@
                         <div class="seven-segment">
                             <div class="segment-wrapper">
                                 <div class="segment-display" data-label="DAY" id="dayDisplay">MON</div>
-                                <div class="arrow-buttons">
-                                    <button class="arrow-btn" data-direction="-1" data-target="dayDisplay">&lt;</button>
-                                    <button class="arrow-btn" data-direction="1" data-target="dayDisplay">&gt;</button>
-                                </div>
+                                <!-- Arrow buttons for desktop are hidden by CSS -->
+                                <button class="arrow-btn" data-direction="-1" data-target="dayDisplay">&lt;</button>
+                                <button class="arrow-btn" data-direction="1" data-target="dayDisplay">&gt;</button>
                             </div>
                             ${action.Format.includes('time=') && !action.Format.includes('starttime=') ? `
                             <div class="segment-wrapper">
                                 <div class="segment-display" data-label="HOUR" id="hourDisplay">09</div>
-                                <div class="arrow-buttons">
-                                    <button class="arrow-btn" data-direction="-1" data-target="hourDisplay">&lt;</button>
-                                    <button class="arrow-btn" data-direction="1" data-target="hourDisplay">&gt;</button>
-                                </div>
+                                <button class="arrow-btn" data-direction="-1" data-target="hourDisplay">&lt;</button>
+                                <button class="arrow-btn" data-direction="1" data-target="hourDisplay">&gt;</button>
                             </div>
                             <div class="segment-wrapper">
                                 <div class="segment-display" data-label="MIN" id="minDisplay">00</div>
-                                <div class="arrow-buttons">
-                                    <button class="arrow-btn" data-direction="-1" data-target="minDisplay">&lt;</button>
-                                    <button class="arrow-btn" data-direction="1" data-target="minDisplay">&gt;</button>
-                                </div>
+                                <button class="arrow-btn" data-direction="-1" data-target="minDisplay">&lt;</button>
+                                <button class="arrow-btn" data-direction="1" data-target="minDisplay">&gt;</button>
                             </div>
                             <div class="segment-wrapper">
                                 <div class="segment-display" data-label="AM/PM" id="ampmDisplay">AM</div>
-                                <div class="arrow-buttons">
-                                    <button class="arrow-btn" data-direction="-1" data-target="ampmDisplay">&lt;</button>
-                                    <button class="arrow-btn" data-direction="1" data-target="ampmDisplay">&gt;</button>
-                                </div>
+                                <button class="arrow-btn" data-direction="-1" data-target="ampmDisplay">&lt;</button>
+                                <button class="arrow-btn" data-direction="1" data-target="ampmDisplay">&gt;</button>
                             </div>
                             ` : ''}
                         </div>
@@ -755,47 +763,35 @@
                             <div class="seven-segment">
                                 <div class="segment-wrapper">
                                     <div class="segment-display" data-label="START HR" id="startHourDisplay">09</div>
-                                    <div class="arrow-buttons">
-                                        <button class="arrow-btn" data-direction="-1" data-target="startHourDisplay">&lt;</button>
-                                        <button class="arrow-btn" data-direction="1" data-target="startHourDisplay">&gt;</button>
-                                    </div>
+                                    <button class="arrow-btn" data-direction="-1" data-target="startHourDisplay">&lt;</button>
+                                    <button class="arrow-btn" data-direction="1" data-target="startHourDisplay">&gt;</button>
                                 </div>
                                 <div class="segment-wrapper">
                                     <div class="segment-display" data-label="START MIN" id="startMinDisplay">00</div>
-                                    <div class="arrow-buttons">
-                                        <button class="arrow-btn" data-direction="-1" data-target="startMinDisplay">&lt;</button>
-                                        <button class="arrow-btn" data-direction="1" data-target="startMinDisplay">&gt;</button>
-                                    </div>
+                                    <button class="arrow-btn" data-direction="-1" data-target="startMinDisplay">&lt;</button>
+                                    <button class="arrow-btn" data-direction="1" data-target="startMinDisplay">&gt;</button>
                                 </div>
                                 <div class="segment-wrapper">
                                     <div class="segment-display" data-label="START AM/PM" id="startAmpmDisplay">AM</div>
-                                    <div class="arrow-buttons">
-                                        <button class="arrow-btn" data-direction="-1" data-target="startAmpmDisplay">&lt;</button>
-                                        <button class="arrow-btn" data-direction="1" data-target="startAmpmDisplay">&gt;</button>
-                                    </div>
+                                    <button class="arrow-btn" data-direction="-1" data-target="startAmpmDisplay">&lt;</button>
+                                    <button class="arrow-btn" data-direction="1" data-target="startAmpmDisplay">&gt;</button>
                                 </div>
                             </div>
                             <div class="seven-segment">
                                 <div class="segment-wrapper">
                                     <div class="segment-display" data-label="END HR" id="endHourDisplay">05</div>
-                                    <div class="arrow-buttons">
-                                        <button class="arrow-btn" data-direction="-1" data-target="endHourDisplay">&lt;</button>
-                                        <button class="arrow-btn" data-direction="1" data-target="endHourDisplay">&gt;</button>
-                                    </div>
+                                    <button class="arrow-btn" data-direction="-1" data-target="endHourDisplay">&lt;</button>
+                                    <button class="arrow-btn" data-direction="1" data-target="endHourDisplay">&gt;</button>
                                 </div>
                                 <div class="segment-wrapper">
                                     <div class="segment-display" data-label="END MIN" id="endMinDisplay">00</div>
-                                    <div class="arrow-buttons">
-                                        <button class="arrow-btn" data-direction="-1" data-target="endMinDisplay">&lt;</button>
-                                        <button class="arrow-btn" data-direction="1" data-target="endMinDisplay">&gt;</button>
-                                    </div>
+                                    <button class="arrow-btn" data-direction="-1" data-target="endMinDisplay">&lt;</button>
+                                    <button class="arrow-btn" data-direction="1" data-target="endMinDisplay">&gt;</button>
                                 </div>
                                 <div class="segment-wrapper">
                                     <div class="segment-display" data-label="END AM/PM" id="endAmpmDisplay">PM</div>
-                                    <div class="arrow-buttons">
-                                        <button class="arrow-btn" data-direction="-1" data-target="endAmpmDisplay">&lt;</button>
-                                        <button class="arrow-btn" data-direction="1" data-target="endAmpmDisplay">&gt;</button>
-                                    </div>
+                                    <button class="arrow-btn" data-direction="-1" data-target="endAmpmDisplay">&lt;</button>
+                                    <button class="arrow-btn" data-direction="1" data-target="endAmpmDisplay">&gt;</button>
                                 </div>
                             </div>
                         ` : ''}
@@ -806,6 +802,7 @@
             html += `
                 </div>
                 <div class="action-buttons">
+                    <button class="btn" onclick="showMenu()">← Back to Menu</button>
                     <button class="btn" onclick="executeAction()">Execute</button>
                 </div>
                 <div id="result" class="result-display" style="display: none;"></div>
@@ -875,11 +872,9 @@
                         <h3>Select Day</h3>
                         <div class="seven-segment">
                             <div class="segment-wrapper">
+                                <button class="arrow-btn" data-direction="-1" data-target="dayDisplay">&lt;</button>
                                 <div class="segment-display ${activeSegmentId === 'dayDisplay' ? 'active' : ''}" data-label="DAY" id="dayDisplay">MON</div>
-                                <div class="arrow-buttons">
-                                    <button class="arrow-btn" data-direction="-1" data-target="dayDisplay">&lt;</button>
-                                    <button class="arrow-btn" data-direction="1" data-target="dayDisplay">&gt;</button>
-                                </div>
+                                <button class="arrow-btn" data-direction="1" data-target="dayDisplay">&gt;</button>
                             </div>
                         </div>
                     </div>
@@ -896,25 +891,19 @@
                         <h3>Select ${label}</h3>
                         <div class="seven-segment">
                             <div class="segment-wrapper">
+                                <button class="arrow-btn" data-direction="-1" data-target="${hourId}">&lt;</button>
                                 <div class="segment-display ${activeSegmentId === hourId ? 'active' : ''}" data-label="HOUR" id="${hourId}">09</div>
-                                <div class="arrow-buttons">
-                                    <button class="arrow-btn" data-direction="-1" data-target="${hourId}">&lt;</button>
-                                    <button class="arrow-btn" data-direction="1" data-target="${hourId}">&gt;</button>
-                                </div>
+                                <button class="arrow-btn" data-direction="1" data-target="${hourId}">&gt;</button>
                             </div>
                             <div class="segment-wrapper">
+                                <button class="arrow-btn" data-direction="-1" data-target="${minId}">&lt;</button>
                                 <div class="segment-display ${activeSegmentId === minId ? 'active' : ''}" data-label="MIN" id="${minId}">00</div>
-                                <div class="arrow-buttons">
-                                    <button class="arrow-btn" data-direction="-1" data-target="${minId}">&lt;</button>
-                                    <button class="arrow-btn" data-direction="1" data-target="${minId}">&gt;</button>
-                                </div>
+                                <button class="arrow-btn" data-direction="1" data-target="${minId}">&gt;</button>
                             </div>
                             <div class="segment-wrapper">
+                                <button class="arrow-btn" data-direction="-1" data-target="${ampmId}">&lt;</button>
                                 <div class="segment-display ${activeSegmentId === ampmId ? 'active' : ''}" data-label="AM/PM" id="${ampmId}">AM</div>
-                                <div class="arrow-buttons">
-                                    <button class="arrow-btn" data-direction="-1" data-target="${ampmId}">&lt;</button>
-                                    <button class="arrow-btn" data-direction="1" data-target="${ampmId}">&gt;</button>
-                                </div>
+                                <button class="arrow-btn" data-direction="1" data-target="${ampmId}">&gt;</button>
                             </div>
                         </div>
                     </div>
@@ -954,6 +943,7 @@
             });
 
             // Arrow buttons for desktop
+            // These buttons are hidden by default via CSS on desktop
             document.querySelectorAll('.arrow-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     playSound(600, 50);
@@ -962,6 +952,12 @@
                     adjustSegmentValue(targetId, direction);
                 });
             });
+
+            // Attach event listener for "Back to Menu" button
+            const backToMenuBtn = document.querySelector('.btn[onclick="showMenu()"]');
+            if (backToMenuBtn) {
+                backToMenuBtn.addEventListener('click', () => playSound(800, 100));
+            }
             
             initializeInputValues();
         };
@@ -995,6 +991,12 @@
                     adjustSegmentValue(targetId, direction);
                 });
             });
+
+            // Attach event listener for "Back to Menu" button
+            const backToMenuBtn = document.querySelector('.btn[onclick="showMenu()"]');
+            if (backToMenuBtn) {
+                backToMenuBtn.addEventListener('click', () => playSound(800, 100));
+            }
             
             initializeInputValues();
         };
