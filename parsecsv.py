@@ -3,13 +3,13 @@ from datetime import datetime
 
 def parse_days(day_str):
     mapping = {
-        'M': 'Mon',
-        'T': 'Tue',
-        'W': 'Wed',
-        'Th': 'Thu',
-        'F': 'Fri',
-        'S': 'Sat',
-        'Su': 'Sun'
+        'M': 'MON',
+        'T': 'TUE',
+        'W': 'WED',
+        'Th': 'THU',
+        'F': 'FRI',
+        'S': 'SAT',
+        'Su': 'SUN'
     }
     result = []
     i = 0
@@ -59,7 +59,7 @@ class room():
         try: check_time = datetime.strptime(timestring, "%I:%M %p").time()
         except: return "Invalid Time"
         for e in self.events:
-            if day in e.day:
+            if day.upper() in e.day:
                 if e.starttime.time() <= check_time < e.endtime.time():
                     return False
         return True
@@ -71,7 +71,7 @@ class room():
             check_end = datetime.strptime(end_time, "%I:%M %p").time()
         except: return "Invalid Time"
         for e in self.events:
-            if day in e.day:
+            if day.upper() in e.day:
                 # Check for overlap
                 event_start = e.starttime.time()
                 event_end = e.endtime.time()
