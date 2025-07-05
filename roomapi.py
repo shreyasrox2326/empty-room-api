@@ -31,7 +31,7 @@ def home():
     if(request.method == 'GET'):
 
         key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(3)
+        if key != xxxx: sleep(1)
 
         data = [
             {"Message":"If someone wants to make a front end for this please do."},
