@@ -14,25 +14,26 @@
             --border-color: #333333;
         }
         
-        * {
+        /* Ensure html and body take full available height and allow scrolling */
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'JetBrains Mono', monospace;
             background: var(--bg-color);
             color: var(--primary-color);
-            height: 100vh;
-            overflow: hidden; /* Prevent overall scrollbars */
+            overflow-y: auto; /* Allow vertical scrolling for the entire body */
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            height: 100vh;
+            min-height: 100%; /* Ensure container takes at least full height */
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
@@ -384,7 +385,7 @@
 
             .segment-wrapper {
                 flex-direction: row; /* Arrange buttons and display in a row */
-                width: 100%; /* Take full width to center content */
+                width: auto; /* Allow width to fit content, not necessarily 100% */
                 justify-content: center; /* Center the items within the wrapper */
                 margin-bottom: 10px; /* Add space between segment rows on mobile */
             }
@@ -401,11 +402,6 @@
             }
 
             /* Show arrow buttons when the associated segment display is active */
-            .segment-display.active + .arrow-btn,
-            .arrow-btn[data-target].active { /* For the case where active class is directly on button */
-                opacity: 1;
-            }
-            /* Specific rule to show arrows if the display is active (since buttons are now siblings) */
             .segment-wrapper:has(.segment-display.active) .arrow-btn {
                 opacity: 1;
             }
@@ -956,7 +952,9 @@
             // Attach event listener for "Back to Menu" button
             const backToMenuBtn = document.querySelector('.btn[onclick="showMenu()"]');
             if (backToMenuBtn) {
-                backToMenuBtn.addEventListener('click', () => playSound(800, 100));
+                // Ensure no duplicate listeners
+                backToMenuBtn.removeEventListener('click', playSoundForBackToMenu); 
+                backToMenuBtn.addEventListener('click', playSoundForBackToMenu);
             }
             
             initializeInputValues();
@@ -995,11 +993,16 @@
             // Attach event listener for "Back to Menu" button
             const backToMenuBtn = document.querySelector('.btn[onclick="showMenu()"]');
             if (backToMenuBtn) {
-                backToMenuBtn.addEventListener('click', () => playSound(800, 100));
+                // Ensure no duplicate listeners
+                backToMenuBtn.removeEventListener('click', playSoundForBackToMenu);
+                backToMenuBtn.addEventListener('click', playSoundForBackToMenu);
             }
             
             initializeInputValues();
         };
+
+        // Named function for back to menu sound to allow removal
+        const playSoundForBackToMenu = () => playSound(800, 100);
         
         const initializeInputValues = () => {
             inputData.room = inputData.room || '';
