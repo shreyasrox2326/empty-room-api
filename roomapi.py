@@ -3,6 +3,11 @@ from pathlib import Path
 from parsecsv import *
 import os
 from time import sleep
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app, origins=["https://yourusername.github.io"])  # ← this line enables CORS
+
 try: import env
 except: pass
 
@@ -15,7 +20,6 @@ except:
         print('null key')
         xxxx = 'null'
 
-app = Flask(__name__)
 
 @app.route("/healthz")
 @app.route("/home")
