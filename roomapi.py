@@ -69,7 +69,7 @@ def fetch_room():
         return jsonify({"Result":data})
 
 @app.route('/room-day-sched', methods = ['GET', 'POST'])
-def fetch_room():
+def room_day_sched():
     if(request.method == 'GET'):
         roomname = request.args.get("roomname")
         day = request.args.get("day")
