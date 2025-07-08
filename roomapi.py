@@ -79,7 +79,7 @@ def room_day_sched():
         roomresult = fetchroom(roomname)
         if roomresult: 
             data=roomresult.events
-            day_sched = [{'From': i.extras['Start Time'], 'Until' : i.extras['End Time'], '1. Course Code & Component' : i.extras['Course Code']+' '+i.extras['Component']} for i in data if day.upper() in i.day]
+            day_sched = [{'From': i.extras['Start Time'], 'Until' : i.extras['End Time'], 'Course Code & Component' : i.extras['Course Code']+' '+i.extras['Component']} for i in data if day.upper() in i.day]
             day_sched.sort(key=lambda i: datetime.strptime(i['From'], "%I:%M %p"))
         else: data='Room Not Found'
         return jsonify({"Result":day_sched, "roomname":roomname, "day" : day})
