@@ -8,7 +8,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, origins=["https://shreyasrox2326.github.io"])  # ← this line enables CORS
-
+# how to check what origin it is actually coming from?
+# You can check the request origin using request.headers.get("Origin")
 try: import env
 except: pass
 
@@ -21,6 +22,11 @@ except:
         print('null key')
         xxxx = 'null'
 
+def conditional_sleep(key):
+    if (request.headers.get("Origin") == "https://shreyasrox2326.github.io"): return 0
+    if (key == xxxx): return 0
+    else: return 1
+    
 
 @app.route("/healthz")
 @app.route("/home")
@@ -30,9 +36,8 @@ def health():
 @app.route('/', methods = ['GET', 'POST', 'HEAD'])
 def home():
     if(request.method == 'GET'):
-
-        key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(1)
+        print("Request Origin:", request.headers.get("Origin"))
+        if conditional_sleep(request.args.get('no-delay-key', -1)): sleep(1)
 
         data = [
             {"Message":"If someone wants to make a front end for this please do."},
@@ -51,8 +56,7 @@ def home():
 @app.route('/list-rooms', methods = ['GET', 'POST'])
 def list_rooms():
     if(request.method == 'GET'):
-        key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(3)
+        if conditional_sleep(request.args.get('no-delay-key', -1)): sleep(3)
         data = csv_result['roomset']
         return jsonify({"Rooms":data})
 
@@ -60,8 +64,7 @@ def list_rooms():
 def fetch_room():
     if(request.method == 'GET'):
         input_string = request.args.get("roomname")
-        key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(3)
+        if conditional_sleep(request.args.get('no-delay-key', -1)): sleep(3)
 
         roomresult = fetchroom(input_string)
         if roomresult: data=roomresult.dict()
@@ -73,8 +76,7 @@ def room_day_sched():
     if(request.method == 'GET'):
         roomname = request.args.get("roomname")
         day = request.args.get("day")
-        key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(3)
+        if conditional_sleep(request.args.get('no-delay-key', -1)): sleep(3)
 
         roomresult = fetchroom(roomname)
         if roomresult: 
@@ -90,8 +92,7 @@ def check_instant():
         roomname = request.args.get("roomname")
         day = request.args.get("day")
         time = request.args.get("time")
-        key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(3)
+        if conditional_sleep(request.args.get('no-delay-key', -1)): sleep(3)
 
         roomresult = fetchroom(roomname)
         if roomresult: data=roomresult.checkinstant(day, time)
@@ -106,8 +107,7 @@ def check_interval():
         starttime = request.args.get("starttime")
         endtime = request.args.get("endtime")
         print(roomname, day, starttime, endtime)
-        key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(3)
+        if conditional_sleep(request.args.get('no-delay-key', -1)): sleep(3)
 
         
         roomresult = fetchroom(roomname)
@@ -121,8 +121,7 @@ def list_instant():
     if(request.method == 'GET'):
         day = request.args.get("day")
         time = request.args.get("time")
-        key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(3)
+        if conditional_sleep(request.args.get('no-delay-key', -1)): sleep(3)
 
         data = [i for i in csv_result['roomset'] if fetchroom(i).checkinstant(day, time)==True]
         return jsonify({"day" : day, 'time': time, 'available' : data})
@@ -134,8 +133,7 @@ def list_interval():
         starttime = request.args.get("starttime")
         endtime = request.args.get("endtime")
 
-        key = request.args.get('no-delay-key', -1)
-        if key != xxxx: sleep(3)
+        if conditional_sleep(request.args.get('no-delay-key', -1)): sleep(3)
 
         
         data = [i for i in csv_result['roomset'] if fetchroom(i).checkinterval(day, starttime, endtime)==True]

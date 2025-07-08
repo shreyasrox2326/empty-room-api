@@ -473,11 +473,11 @@
                 <div class="color-btn" data-bg="theme" style="background: #111111; border-color: #666;"></div>
             </div>
             
-            <div class="no-delay-container">
+            <!--<div class="no-delay-container">
                 <input type="password" class="no-delay-input" placeholder="No-delay key (32 hex chars)" id="noDelayKey" maxlength="32">
                 <button class="no-delay-toggle" id="noDelayToggle">👁</button>
                 <div class="no-delay-counter" id="noDelayCounter"></div>
-            </div>
+            </div>-->
         </div>
         
         <div class="screen">
@@ -595,7 +595,7 @@
         };
         
         // No-delay key handlers
-        const noDelayInput = document.getElementById('noDelayKey');
+        /*const noDelayInput = document.getElementById('noDelayKey');
         const noDelayToggle = document.getElementById('noDelayToggle');
         const noDelayCounter = document.getElementById('noDelayCounter');
         
@@ -618,7 +618,7 @@
                 noDelayInput.type = 'password';
                 noDelayToggle.textContent = '👁';
             }
-        });
+        });*/
         
         // Fetch API actions
         const initializeApp = async () => {
@@ -1124,14 +1124,15 @@
                 params.append('endtime', endTimeStr);
             }
             
-            const noDelayKey = document.getElementById('noDelayKey').value;
+            try {noDelayKey = document.getElementById('noDelayKey').value;}
+            catch (error) {noDelayKey = 'shreyasrox2326.github.io';}
             if (noDelayKey) {
                 params.append('no-delay-key', noDelayKey);
             }
             
             if (params.toString()) {
                 url += '?' + params.toString();
-            }
+            } 
             
             try {
                 const response = await fetch(url);
