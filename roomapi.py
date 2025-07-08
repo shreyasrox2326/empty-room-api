@@ -4,6 +4,7 @@ from parsecsv import *
 import os
 from time import sleep
 from flask_cors import CORS
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, origins=["https://shreyasrox2326.github.io"])  # ← this line enables CORS
@@ -38,6 +39,7 @@ def home():
             {"Action": "Help", "Format" : "/?no-delay-key=--OPTIONAL--KEY--"},
             {"Action": "List all rooms", "Format" : "/list-rooms?no-delay-key=--OPTIONAL--KEY--"},
             {"Action": "Fetch data for room", "Format" : "/fetch-room?roomname=D217&no-delay-key=--OPTIONAL--KEY--"},
+            {"Action": "Fetch room schedule for specific day", "Format" : "/room-day-sched?roomname=D217&day=Mon&no-delay-key=--OPTIONAL--KEY--"},
             {"Action" : "Check if room is available during a given instant on a specific day", "Format" : "/check-instant?roomname=D217&day=Mon&time=01:00 PM&no-delay-key=--OPTIONAL--KEY--"},
             {"Action" : "Check if room is available during a given interval on a specific day", "Format" : "/check-interval?roomname=D217&day=Mon&starttime=09:00 AM&endtime=01:00 PM&no-delay-key=--OPTIONAL--KEY--"},
             {"Action" : "List all available rooms during a given instant on a specific day", "Format" : "/list-instant?day=Mon&time=01:00 PM&no-delay-key=--OPTIONAL--KEY--"},
@@ -65,6 +67,22 @@ def fetch_room():
         if roomresult: data=roomresult.dict()
         else: data='Room Not Found'
         return jsonify({"Result":data})
+
+@app.route('/room-day-sched', methods = ['GET', 'POST'])
+def fetch_room():
+    if(request.method == 'GET'):
+        roomname = request.args.get("roomname")
+        day = request.args.get("day")
+        key = request.args.get('no-delay-key', -1)
+        if key != xxxx: sleep(3)
+
+        roomresult = fetchroom(roomname)
+        if roomresult: 
+            data=roomresult.events
+            day_sched = [{'Start Time': i.extras['Start Time'], 'End Time' : i.extras['End Time'], 'Course Code & Component' : i.extras['Course Code']+' '+i.extras['Component']} for i in data if day.upper() in i.day]
+            day_sched.sort(key=lambda i: datetime.strptime(i['Start Time'], "%I:%M %p"))
+        else: data='Room Not Found'
+        return jsonify({"Result":day_sched, "roomname":roomname, "day" : day})
 
 @app.route('/check-instant', methods = ['GET', 'POST'])
 def check_instant():
