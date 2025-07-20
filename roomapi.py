@@ -7,7 +7,7 @@ from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app, origins=["https://shreyasrox2326.github.io"])  # ← this line enables CORS
+CORS(app, origins=["https://shreyasrox2326.github.io", "http://localhost:3000", "https://snu-xplore-4-0.vercel.app"])  # ← this line enables CORS
 # how to check what origin it is actually coming from?
 # You can check the request origin using request.headers.get("Origin")
 try: import env
