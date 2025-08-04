@@ -33,8 +33,22 @@ class event():
             self.course = coursedict['Course Code']
             self.component = coursedict['Component']
             self.day = coursedict['Day']
-            self.starttime = datetime.strptime(coursedict['Start Time'],"%I:%M %p")
-            self.endtime = datetime.strptime(coursedict['End Time'],"%I:%M %p")
+            for fmt in ("%H:%M:%S", "%H:%M", "%I:%M %p"):
+                try:
+                    self.starttime = datetime.strptime(coursedict['Start Time'], fmt)
+                    break
+                except ValueError:
+                    continue
+            else:
+                raise ValueError(f"Unrecognized start time format: {coursedict['Start Time']}")
+            for fmt in ("%H:%M:%S", "%H:%M", "%I:%M %p"):
+                try:
+                    self.endtime = datetime.strptime(coursedict['End Time'], fmt)
+                    break
+                except ValueError:
+                    continue
+            else:
+                raise ValueError(f"Unrecognized end time format: {coursedict['End Time']}")
             self.room = coursedict['Room']
             self.extras = coursedict
         else:
@@ -97,7 +111,7 @@ def csvparse():
 
     events_list = []
     for i in rows:
-        if i['Room'] in roomset:
+        if i['Room'] in roomset and i['Start Time'] != '' and i['End Time'] != '':
             # i['Start Time'] = datetime.strptime(i['Start Time'],"%I:%M %p")
             # i['End Time'] = datetime.strptime(i['End Time'],"%I:%M %p")
             i['Day'] = parse_days(i['Day'])

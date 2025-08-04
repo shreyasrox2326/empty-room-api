@@ -7,7 +7,12 @@ from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app, origins=["https://shreyasrox2326.github.io", "http://localhost:3000", "https://snu-xplore-4-0.vercel.app"])  # ← this line enables CORS
+CORS(app, origins=[
+    "https://shreyasrox2326.github.io",
+    # "http://localhost:3000",
+    "https://snu-xplore-4-0.vercel.app",
+    # "null",
+    ])  # ← this line enables CORS
 # how to check what origin it is actually coming from?
 # You can check the request origin using request.headers.get("Origin")
 try: import env
@@ -25,6 +30,7 @@ except:
 def conditional_sleep(key):
     if (request.headers.get("Origin") == "https://shreyasrox2326.github.io"): return 0
     if (request.headers.get("Origin") == "https://snu-xplore-4-0.vercel.app"): return 0
+    # if (request.headers.get("Origin") == "null"): return 0
     if (key == xxxx): return 0
     else: return 1
     
@@ -82,7 +88,7 @@ def room_day_sched():
         roomresult = fetchroom(roomname)
         if roomresult: 
             data=roomresult.events
-            day_sched = [{'From': i.extras['Start Time'], 'Until' : i.extras['End Time'], 'Course Code & Component' : i.extras['Course Code']+' '+i.extras['Component']} for i in data if day.upper() in i.day]
+            day_sched = [{'From': i.starttime.strftime("%I:%M %p"), 'Until' : i.endtime.strftime("%I:%M %p"), 'Course Code & Component' : i.course+' '+i.component} for i in data if day.upper() in i.day]
             day_sched.sort(key=lambda i: datetime.strptime(i['From'], "%I:%M %p"))
         else: day_sched='Room Not Found'
         return jsonify({"Result":day_sched, "roomname":roomname, "day" : day})
