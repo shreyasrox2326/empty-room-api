@@ -32,6 +32,8 @@ except:
 def conditional_sleep(key):
     if (request.headers.get("Origin") == "https://shreyasrox2326.github.io"): return 0
     if (request.headers.get("Origin") == "https://snu-xplore-4-0.vercel.app"): return 0
+    if (request.headers.get("Origin") == "https://snu-xplore-six.vercel.app"): return 0
+    if (request.headers.get("Origin") == "https://snuxplore.com"): return 0
     # if (request.headers.get("Origin") == "null"): return 0
     if (key == xxxx): return 0
     else: return 1
