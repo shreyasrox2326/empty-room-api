@@ -11,6 +11,8 @@ CORS(app, origins=[
     "https://shreyasrox2326.github.io",
     # "http://localhost:3000",
     "https://snu-xplore-4-0.vercel.app",
+    "https://snu-xplore-six.vercel.app",
+    "https://snuxplore.com"
     # "null",
     ])  # ← this line enables CORS
 # how to check what origin it is actually coming from?
