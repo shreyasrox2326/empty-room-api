@@ -105,7 +105,7 @@ def csvparse():
     roomset = set()
     for i in rows:
         if i['Room'] != '': roomset.add(i['Room'])
-    roomset = set([i for i in roomset if (i[0] in 'ABCD' and i[1:].isdigit() and len(i)==4)])
+    roomset = set([i for i in roomset if (i[0] in 'ABCD' and i[1:].isdigit() and len(i)==4 or i[0]=='G')])
     
     roomset = sorted(roomset)
 
